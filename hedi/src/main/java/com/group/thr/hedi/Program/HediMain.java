@@ -1,4 +1,4 @@
-package com.group.thr.hedi;
+package com.group.thr.hedi.Program;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
 @SpringBootApplication
-public class HediApplication {
+public class HediMain {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HediApplication.class, args);
+		SpringApplication.run(HediMain.class, args);
 	}
 @EventListener(ApplicationReadyEvent.class)
 	public void openSwaggerUI() {
