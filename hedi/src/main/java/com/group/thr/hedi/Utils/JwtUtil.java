@@ -8,24 +8,38 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtUtil {
 
-   @Value("${jwt.secret}")
+    @Value("${jwt.secret}")
     private String secretKey;
 
     @Value("${jwt.expiration}")
     private long expirationTime;
 
+    @Value("${jwt.refresh.expiration:604800000}")  // 7 days default
+    private long refreshExpirationTime;
 
-    public String generateToken(String email, int studentId, String role) {
+    public String generateToken(String email, int userId, String role) {
         return Jwts.builder()
                 .subject(email)
-                .claim("studentId", studentId)
+                .claim("userId", userId)
                 .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expirationTime))
+                .signWith(getSigningKey())
+                .compact();
+    }
+
+    public String generateRefreshToken(int userId) {
+        String refreshToken = UUID.randomUUID().toString();
+        return Jwts.builder()
+                .claim("userId", userId)
+                .claim("type", "refresh")
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + refreshExpirationTime))
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -44,14 +58,19 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    public int extractStudentId(String token) {
+    public int extractUserId(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .get("studentId", Integer.class);
+                .get("userId", Integer.class);
     }
+
+    public int extractStudentId(String token) {
+        return extractUserId(token);
+    }
+
     public String extractRole(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
@@ -71,5 +90,27 @@ public class JwtUtil {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public boolean isTokenExpired(String token) {
+        try {
+            Date expiration = Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getExpiration();
+            return expiration.before(new Date());
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    public long getExpirationTime() {
+        return expirationTime;
+    }
+
+    public long getRefreshExpirationTime() {
+        return refreshExpirationTime;
     }
 }
