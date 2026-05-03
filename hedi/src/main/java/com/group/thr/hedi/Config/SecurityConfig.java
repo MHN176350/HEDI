@@ -35,12 +35,18 @@ public class SecurityConfig {
                     "/configuration/ui",
                     "/configuration/security",
                     "/webjars/**",
-                    "/error" // Very important to prevent masking 404s as 403s
+                    "/error",
+                    "/api/auth/login",
+                    "/api/auth/register",
+                    "/api/auth/logout/**",
+                    "/api/auth/oauth/callback",
+                    "/api/auth/refresh"
                 ).permitAll()
                 
                 
                 // Restricted Admin Endpoints
                 .requestMatchers("/api/lecturers/**","/api/projects/**").permitAll()//.hasAuthority("Admin")
+                .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

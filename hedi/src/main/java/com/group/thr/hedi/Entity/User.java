@@ -3,6 +3,7 @@ package com.group.thr.hedi.Entity;
 import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -19,10 +20,11 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = true)
+    private String hashed_Password;
     @Column(nullable = false)
-    private String password;
-
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
 
     @Enumerated(EnumType.STRING)
@@ -30,9 +32,18 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private AccountStatus status; 
+    
+    @Column(unique = true, nullable = true)
+    private String oauth_Id;
+    
+    @Column(nullable = true)
+    private String oauth_Provider;  // e.g., "google", "github"
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<RefreshToken> refreshTokens;
 
     @PrePersist
     protected void onCreate() {

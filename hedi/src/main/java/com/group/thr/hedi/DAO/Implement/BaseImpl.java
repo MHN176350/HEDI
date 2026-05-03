@@ -2,10 +2,10 @@ package com.group.thr.hedi.DAO.Implement;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.group.thr.hedi.DAO.Interface.Base;
+import com.group.thr.hedi.DAO.Interface.IBase;
 
 
-public class BaseImpl<T, ID> implements Base<T, ID> {
+public class BaseImpl<T, ID> implements IBase<T, ID> {
     private final JpaRepository<T, ID> repository;
     protected BaseImpl(JpaRepository<T, ID> repository) {
         this.repository = repository;
@@ -13,7 +13,6 @@ public class BaseImpl<T, ID> implements Base<T, ID> {
     @Override
     public T save(T entity) {
         return repository.save(entity);
-       
     }
 
     @Override
