@@ -1,4 +1,4 @@
-package com.group.thr.hedi.Program;
+package com.group.thr.hedi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
