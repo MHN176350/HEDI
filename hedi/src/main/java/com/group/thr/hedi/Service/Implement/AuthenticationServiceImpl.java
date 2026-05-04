@@ -6,9 +6,9 @@ import com.group.thr.hedi.DTO.Authetication.Response.LoginResponse;
 import com.group.thr.hedi.DTO.Authetication.Response.RegisterResponse;
 import com.group.thr.hedi.DTO.Authetication.Response.RefreshTokenResponse;
 import com.group.thr.hedi.Entity.User;
+import com.group.thr.hedi.Repository.IAuthenticationRepository;
+import com.group.thr.hedi.Repository.IRefreshTokenRepository;
 import com.group.thr.hedi.Entity.RefreshToken;
-import com.group.thr.hedi.Repository.Interface.AuthenticationRepository;
-import com.group.thr.hedi.Repository.Interface.RefreshTokenRepository;
 import com.group.thr.hedi.Service.Interface.IAuthenticationService;
 import com.group.thr.hedi.Utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +22,10 @@ import java.util.Optional;
 public class AuthenticationServiceImpl implements IAuthenticationService {
 
     @Autowired
-    private AuthenticationRepository authenticationRepository;
+    private IAuthenticationRepository authenticationRepository;
 
     @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
+    private IRefreshTokenRepository refreshTokenRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
