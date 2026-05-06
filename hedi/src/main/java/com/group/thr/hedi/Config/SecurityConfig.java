@@ -41,13 +41,11 @@ public class SecurityConfig {
                     "/api/auth/logout/**",
                     "/api/auth/oauth/callback",
                     "/api/auth/oauth/test",
-                    "/api/auth/refresh"
+                    "/api/auth/refresh",
+                    "/api/**"
                 ).permitAll()
                 
                 
-                // Restricted Admin Endpoints
-                .requestMatchers("/api/lecturers/**","/api/projects/**").permitAll()//.hasAuthority("Admin")
-                .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

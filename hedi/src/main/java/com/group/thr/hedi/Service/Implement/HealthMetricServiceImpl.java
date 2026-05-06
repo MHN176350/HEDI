@@ -4,6 +4,9 @@ import com.group.thr.hedi.DAO.Interface.IHealthMetricDAO;
 import com.group.thr.hedi.Entity.HealthRecord.MetricType;
 import com.group.thr.hedi.Entity.Metric;
 import com.group.thr.hedi.Service.Interface.IHealthMetricService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,4 +60,11 @@ public class HealthMetricServiceImpl implements IHealthMetricService {
             }
         }
     }
+
+@Override
+public List<Metric> getAllActiveMetrics() {
+    return healthMetricDAO.findAll().stream()
+            .filter(Metric::isActive)
+            .toList();
+}
 }

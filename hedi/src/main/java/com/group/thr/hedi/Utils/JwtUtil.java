@@ -19,7 +19,7 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private long expirationTime;
 
-    @Value("${jwt.refresh.expiration:604800000}")  // 7 days default
+    @Value("${jwt.refresh.expiration:604800000}")
     private long refreshExpirationTime;
 
     public String generateToken(String email, int userId, String role) {
@@ -34,15 +34,15 @@ public class JwtUtil {
     }
 
     public String generateRefreshToken(int userId) {
-        String refreshToken = UUID.randomUUID().toString();
-        return Jwts.builder()
-                .claim("userId", userId)
-                .claim("type", "refresh")
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + refreshExpirationTime))
-                .signWith(getSigningKey())
-                .compact();
-    }
+    return Jwts.builder()
+            .id(UUID.randomUUID().toString())
+            .claim("userId", userId)
+            .claim("type", "refresh")
+            .issuedAt(new Date())
+            .expiration(new Date(System.currentTimeMillis() + refreshExpirationTime))
+            .signWith(getSigningKey())
+            .compact();
+}
 
     private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);

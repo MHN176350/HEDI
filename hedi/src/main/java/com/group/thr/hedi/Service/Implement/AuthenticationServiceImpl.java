@@ -62,9 +62,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         
         String token = jwtUtil.generateToken(foundUser.getEmail(), Math.toIntExact(foundUser.getId()), foundUser.getRole().toString());
         String refreshToken = jwtUtil.generateRefreshToken(Math.toIntExact(foundUser.getId()));
-        
-        // Save refresh token to database
-        saveRefreshToken(foundUser, refreshToken);
+         saveRefreshToken(foundUser, refreshToken);
         
         LoginResponse response = new LoginResponse();
         response.setToken(token);
@@ -72,7 +70,8 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         response.setEmail(foundUser.getEmail());
         response.setFirstName(foundUser.getFirstName());
         response.setLastName(foundUser.getLastName());
-        
+        response.setFirst(refreshTokenRepository.findByUserId(foundUser.getId()).orElse(null).size()<2);
+       
         return response;
     }
 
@@ -163,10 +162,8 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
             // Get user profile from Google
             GoogleUserProfile googleProfile = googleOAuthUtil.getGoogleUserProfile(accessToken);
             
-            // Log retrieved profile
             System.out.println("[DEBUG] Retrieved Google profile: " + googleProfile.getEmail());
             
-            // Convert to OAuthUserInfo
             OAuthUserInfo oAuthUserInfo = new OAuthUserInfo();
             oAuthUserInfo.setId(googleProfile.getId());
             oAuthUserInfo.setEmail(googleProfile.getEmail());
@@ -174,7 +171,6 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
             oAuthUserInfo.setLastName(googleProfile.getFamilyName() != null ? googleProfile.getFamilyName() : "");
             oAuthUserInfo.setProvider(provider);
             
-            // Authenticate with the actual Google user data
             return authenticateWithOAuth(oAuthUserInfo);
         } catch (Exception e) {
             System.out.println("[ERROR] Google OAuth authentication failed: " + e.getMessage());
@@ -245,4 +241,5 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .build();
         refreshTokenRepository.save(refreshToken);
     }
+   
 }
