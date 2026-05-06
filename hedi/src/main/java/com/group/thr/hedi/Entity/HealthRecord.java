@@ -37,6 +37,6 @@ public class HealthRecord {
         HEART_RATE,
         SpO2_LEVEL
     }
-    @Column(nullable = true)
-    private String imgUrl;
+   @Column(nullable = true)
+   private String imgUrl;
 }
