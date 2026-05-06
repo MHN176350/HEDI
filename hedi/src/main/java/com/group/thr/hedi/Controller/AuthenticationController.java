@@ -80,4 +80,5 @@ public class AuthenticationController {
             return new ResponseFormat(ResponseCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
+
 }
