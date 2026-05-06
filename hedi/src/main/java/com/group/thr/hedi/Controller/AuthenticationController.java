@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.group.thr.hedi.DTO.Authetication.Request.LoginRequest;
 import com.group.thr.hedi.DTO.Authetication.Request.RegisterRequest;
 import com.group.thr.hedi.DTO.Authetication.Request.OAuthUserInfo;
+import com.group.thr.hedi.DTO.Authetication.Request.OAuthCallbackRequest;
 import com.group.thr.hedi.DTO.Authetication.Request.RefreshTokenRequest;
 import com.group.thr.hedi.DTO.Authetication.Response.LoginResponse;
 import com.group.thr.hedi.DTO.Authetication.Response.RegisterResponse;
@@ -44,11 +45,18 @@ public class AuthenticationController {
     }
 
     @PostMapping("/oauth/callback")
-    public ResponseFormat oauthCallback(@RequestBody OAuthUserInfo oAuthUserInfo) {
+    public ResponseFormat oauthCallback(@RequestBody OAuthCallbackRequest request) {
         try {
-            LoginResponse response = authenticationService.authenticateWithOAuth(oAuthUserInfo);
+            if (request.getCode() == null || request.getCode().trim().isEmpty()) {
+                return new ResponseFormat(ResponseCode.BAD_REQUEST, 
+                    "Code is null or empty. Ensure the authorization code from Google is being passed correctly from the frontend.");
+            }
+            
+            LoginResponse response = authenticationService.authenticateWithGoogleCode(request.getCode(), request.getProvider());
             return new ResponseFormat(ResponseCode.SUCCESS, response);
         } catch (Exception e) {
+            System.out.println(" OAuth callback failed: " + e.getMessage());
+            e.printStackTrace();
             return new ResponseFormat(ResponseCode.UNAUTHORIZED, e.getMessage());
         }
     }

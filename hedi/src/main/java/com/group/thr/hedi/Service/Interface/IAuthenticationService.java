@@ -10,6 +10,7 @@ public interface IAuthenticationService {
     LoginResponse authenticate(String email, String password);
     RegisterResponse register(RegisterRequest registerRequest);
     LoginResponse authenticateWithOAuth(OAuthUserInfo oAuthUserInfo);
+    LoginResponse authenticateWithGoogleCode(String code, String provider);
     RefreshTokenResponse refreshToken(String refreshToken);
     void logout(Long userId);
 }
