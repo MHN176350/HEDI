@@ -40,6 +40,7 @@ public class SecurityConfig {
                     "/api/auth/register",
                     "/api/auth/logout/**",
                     "/api/auth/oauth/callback",
+                    "/api/auth/oauth/test",
                     "/api/auth/refresh"
                 ).permitAll()
                 
