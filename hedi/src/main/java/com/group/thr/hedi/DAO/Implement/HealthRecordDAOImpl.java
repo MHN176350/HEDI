@@ -13,4 +13,15 @@ public class HealthRecordDAOImpl extends BaseImpl<HealthRecord, Long> implements
         super(repository);
         this.healthRecordRepository = repository;
     }
+
+    @Override
+    public HealthRecord getLatestRecord(Long userId, String metricTypeStr) {
+       try {
+        HealthRecord.MetricType type = HealthRecord.MetricType.valueOf(metricTypeStr);
+        return healthRecordRepository.findTopByUserIdAndMetricTypeOrderByRecordedAtDesc(userId, type)
+                .orElse(null);
+    } catch (IllegalArgumentException e) {
+        throw new RuntimeException("Invalid metric type");
+    }
+    }
 }
