@@ -2,6 +2,7 @@ package com.group.thr.hedi.Service.Implement;
 
 import com.group.thr.hedi.DTO.Authetication.Request.RegisterRequest;
 import com.group.thr.hedi.DTO.Authetication.Request.OAuthUserInfo;
+import com.group.thr.hedi.DTO.Authetication.Request.GoogleUserProfile;
 import com.group.thr.hedi.DTO.Authetication.Response.LoginResponse;
 import com.group.thr.hedi.DTO.Authetication.Response.RegisterResponse;
 import com.group.thr.hedi.DTO.Authetication.Response.RefreshTokenResponse;
@@ -11,6 +12,7 @@ import com.group.thr.hedi.Repository.Interface.AuthenticationRepository;
 import com.group.thr.hedi.Repository.Interface.RefreshTokenRepository;
 import com.group.thr.hedi.Service.Interface.IAuthenticationService;
 import com.group.thr.hedi.Utils.JwtUtil;
+import com.group.thr.hedi.Utils.GoogleOAuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,9 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private GoogleOAuthUtil googleOAuthUtil;
 
     @Override
     public LoginResponse authenticate(String email, String password) {
@@ -143,6 +148,41 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         response.setLastName(user.getLastName());
         return response;
     }
+    public LoginResponse authenticateWithGoogleCode(String code, String provider) {
+        try {
+            // Log and validate code
+            System.out.println("[DEBUG] authenticateWithGoogleCode called with code: " + code + ", provider: " + provider);
+            
+            if (code == null || code.trim().isEmpty()) {
+                throw new RuntimeException("Authorization code is null or empty. Make sure the code is being passed from the frontend.");
+            }
+            
+            // Exchange authorization code for access token
+            String accessToken = googleOAuthUtil.getGoogleAccessToken(code);
+            
+            // Get user profile from Google
+            GoogleUserProfile googleProfile = googleOAuthUtil.getGoogleUserProfile(accessToken);
+            
+            // Log retrieved profile
+            System.out.println("[DEBUG] Retrieved Google profile: " + googleProfile.getEmail());
+            
+            // Convert to OAuthUserInfo
+            OAuthUserInfo oAuthUserInfo = new OAuthUserInfo();
+            oAuthUserInfo.setId(googleProfile.getId());
+            oAuthUserInfo.setEmail(googleProfile.getEmail());
+            oAuthUserInfo.setFirstName(googleProfile.getGivenName() != null ? googleProfile.getGivenName() : "User");
+            oAuthUserInfo.setLastName(googleProfile.getFamilyName() != null ? googleProfile.getFamilyName() : "");
+            oAuthUserInfo.setProvider(provider);
+            
+            // Authenticate with the actual Google user data
+            return authenticateWithOAuth(oAuthUserInfo);
+        } catch (Exception e) {
+            System.out.println("[ERROR] Google OAuth authentication failed: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Google OAuth authentication failed: " + e.getMessage());
+        }
+    }
+
 
     @Override
     public RefreshTokenResponse refreshToken(String refreshTokenString) {
