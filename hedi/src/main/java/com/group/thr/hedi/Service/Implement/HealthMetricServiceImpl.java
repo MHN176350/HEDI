@@ -1,8 +1,8 @@
 package com.group.thr.hedi.Service.Implement;
 
 import com.group.thr.hedi.DAO.Interface.IHealthMetricDAO;
-import com.group.thr.hedi.Entity.HealthRecord.MetricType;
 import com.group.thr.hedi.Entity.Metric;
+import com.group.thr.hedi.Enum.MetricType;
 import com.group.thr.hedi.Service.Interface.IHealthMetricService;
 
 import java.util.List;
@@ -54,6 +54,11 @@ public class HealthMetricServiceImpl implements IHealthMetricService {
                         newMetric.setUnit("%");
                         newMetric.setDescription("Oxygen saturation level in the blood.");
                         newMetric.setImgUrl("https://images.unsplash.com/photo-1584308666744-24d59b298b17?w=500&auto=format&fit=crop&q=60");
+                        break;
+                    case BMI:
+                        newMetric.setUnit("");
+                        newMetric.setDescription("Estimate total body fat and determine if they are at a healthy weight");
+                        newMetric.setImgUrl("https://plus.unsplash.com/premium_photo-1681400641919-d5d03f6c0720?w=500&auto=format&fit=crop&q=60");
                         break;
                     default:
                         newMetric.setUnit("Unknown");

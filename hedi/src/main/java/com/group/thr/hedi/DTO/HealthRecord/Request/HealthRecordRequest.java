@@ -1,8 +1,10 @@
 package com.group.thr.hedi.DTO.HealthRecord.Request;
 
-import com.group.thr.hedi.Entity.HealthRecord.MetricType;
+
 import lombok.Data;
 import java.time.LocalDateTime;
+
+import com.group.thr.hedi.Enum.MetricType;
 
 @Data
 public class HealthRecordRequest {

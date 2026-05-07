@@ -4,6 +4,8 @@ import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import com.group.thr.hedi.Enum.MetricType;
+
 @Entity
 @Table(name = "health_records")
 @Data
@@ -29,14 +31,6 @@ public class HealthRecord {
 
     @Column(nullable = false)
     private LocalDateTime recordedAt;
-
-    public enum MetricType {
-        BLOOD_SUGAR,
-        BLOOD_PRESSURE_SYSTOLIC,
-        BLOOD_PRESSURE_DIASTOLIC,
-        HEART_RATE,
-        SpO2_LEVEL
-    }
    @Column(nullable = true)
    private String imgUrl;
 }
