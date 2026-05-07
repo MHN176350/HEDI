@@ -33,22 +33,27 @@ public class HealthMetricServiceImpl implements IHealthMetricService {
                     case BLOOD_SUGAR:
                         newMetric.setUnit("mg/dL");
                         newMetric.setDescription("Measures the amount of glucose in the blood.");
+                        newMetric.setImgUrl("https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&auto=format&fit=crop&q=60");
                         break;
                     case BLOOD_PRESSURE_SYSTOLIC:
                         newMetric.setUnit("mmHg");
                         newMetric.setDescription("Pressure in arteries when the heart beats.");
+                        newMetric.setImgUrl("https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=500&auto=format&fit=crop&q=60");
                         break;
                     case BLOOD_PRESSURE_DIASTOLIC:
                         newMetric.setUnit("mmHg");
                         newMetric.setDescription("Pressure in arteries between heartbeats.");
+                        newMetric.setImgUrl("https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=500&auto=format&fit=crop&q=60");
                         break;
                     case HEART_RATE:
                         newMetric.setUnit("BPM");
                         newMetric.setDescription("Number of times the heart beats per minute.");
+                        newMetric.setImgUrl("https://images.unsplash.com/photo-1505503693641-1926193e8d57?w=500&auto=format&fit=crop&q=60");
                         break;
                     case SpO2_LEVEL:
                         newMetric.setUnit("%");
                         newMetric.setDescription("Oxygen saturation level in the blood.");
+                        newMetric.setImgUrl("https://images.unsplash.com/photo-1584308666744-24d59b298b17?w=500&auto=format&fit=crop&q=60");
                         break;
                     default:
                         newMetric.setUnit("Unknown");

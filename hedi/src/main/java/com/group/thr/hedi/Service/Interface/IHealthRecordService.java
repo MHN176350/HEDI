@@ -1,11 +1,12 @@
 package com.group.thr.hedi.Service.Interface;
 
 import com.group.thr.hedi.DTO.HealthRecord.Request.HealthRecordRequest;
-import com.group.thr.hedi.Entity.HealthRecord;
+import com.group.thr.hedi.DTO.HealthRecord.Response.HealthRecordResponse;
 import java.util.List;
 
 public interface IHealthRecordService {
-    HealthRecord createRecord(Long userId, HealthRecordRequest request);
-    List<HealthRecord> getRecordsByUserId(Long userId);
+    HealthRecordResponse createRecord(Long userId, HealthRecordRequest request);
+    List<HealthRecordResponse> getRecordsByUserId(Long userId);
     void deleteRecord(Long id);
+    HealthRecordResponse getLatestRecord(Long userId, String metricType);
 }

@@ -27,4 +27,7 @@ private String unit;
 private String description;
 @Column(nullable = false)
 private boolean isActive=true;
+@Column(nullable = true)
+private String imgUrl;
 }
+

@@ -1,6 +1,8 @@
 package com.group.thr.hedi.Service.Implement;
 
 import com.group.thr.hedi.DTO.Threshold.Request.ThresholdBatchRequest;
+import com.group.thr.hedi.DTO.Threshold.Request.ThresholdToggleRequest;
+import com.group.thr.hedi.DTO.Threshold.Response.ThresholdResponse;
 import com.group.thr.hedi.Entity.Metric;
 import com.group.thr.hedi.Entity.Threshold;
 import com.group.thr.hedi.Entity.User;
@@ -42,5 +44,48 @@ public class ThresholdServiceImpl implements IThresholdService {
         }).collect(Collectors.toList());
 
         thresholdRepository.saveAll(thresholds);
+    }
+    @Override
+public List<ThresholdResponse> getUserThresholds(Long userId) {
+        return thresholdRepository.findByUserId(userId).stream()
+                .filter(Threshold::isActive) 
+                .map(t -> {
+                    ThresholdResponse res = new ThresholdResponse();
+                    res.setId(t.getId());
+                    res.setMetricId(t.getMetric().getId());
+                    res.setMetricName(t.getMetric().getName());
+                    res.setUnit(t.getMetric().getUnit());
+                    res.setMinValue(t.getMinValue());
+                    res.setMaxValue(t.getMaxValue());
+                    return res;
+                }).collect(Collectors.toList());
+}
+    @Override
+    public void updateThresholdSettings(Long userId, List<ThresholdToggleRequest> requests) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+       
+        List<Threshold> thresholdsToSave = requests.stream().map(req -> {
+            Metric metric = metricRepository.findById(req.getMetricId())
+                    .orElseThrow(() -> new RuntimeException("Metric not found"));
+
+          
+            Threshold threshold = thresholdRepository.findByUserIdAndMetricId(userId, req.getMetricId())
+                    .orElse(new Threshold());
+
+            threshold.setUser(user);
+            threshold.setMetric(metric);
+            threshold.setActive(req.isActive());
+            
+            if (req.isActive()) {
+                threshold.setMinValue(req.getMinValue());
+                threshold.setMaxValue(req.getMaxValue());
+            }
+
+            return threshold;
+        }).collect(Collectors.toList());
+
+        thresholdRepository.saveAll(thresholdsToSave);
     }
 }

@@ -2,6 +2,7 @@ package com.group.thr.hedi.Service.Implement;
 
 import com.group.thr.hedi.DAO.Interface.IHealthRecordDAO;
 import com.group.thr.hedi.DTO.HealthRecord.Request.HealthRecordRequest;
+import com.group.thr.hedi.DTO.HealthRecord.Response.HealthRecordResponse;
 import com.group.thr.hedi.Entity.HealthRecord;
 import com.group.thr.hedi.Entity.User;
 import com.group.thr.hedi.Repository.IAuthenticationRepository;
@@ -23,7 +24,7 @@ public class HealthRecordServiceImpl implements IHealthRecordService {
     private IAuthenticationRepository userRepository;
 
     @Override
-    public HealthRecord createRecord(Long userId, HealthRecordRequest request) {
+    public HealthRecordResponse createRecord(Long userId, HealthRecordRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -34,18 +35,32 @@ public class HealthRecordServiceImpl implements IHealthRecordService {
                 .recordedAt(request.getRecordedAt() != null ? request.getRecordedAt() : LocalDateTime.now())
                 .build();
 
-        return healthRecordDAO.save(record);
+        return mapToResponse(healthRecordDAO.save(record));
     }
 
     @Override
-    public List<HealthRecord> getRecordsByUserId(Long userId) {
+    public List<HealthRecordResponse> getRecordsByUserId(Long userId) {
         return healthRecordDAO.findAll().stream()
                 .filter(record -> record.getUser().getId().equals(userId))
+                .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
     public void deleteRecord(Long id) {
         healthRecordDAO.deleteById(id);
+    }
+
+    @Override
+    public HealthRecordResponse getLatestRecord(Long userId, String metricType) {
+       return  mapToResponse(healthRecordDAO.getLatestRecord(userId, metricType));
+    }
+    private HealthRecordResponse mapToResponse(HealthRecord record) {
+        HealthRecordResponse response = new HealthRecordResponse();
+        response.setId(record.getId());
+        response.setMetricType(record.getMetricType().name());
+        response.setMetricValue(record.getMetricValue());
+        response.setRecordedAt(record.getRecordedAt());
+        return response;
     }
 }

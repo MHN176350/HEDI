@@ -2,7 +2,7 @@ package com.group.thr.hedi.Controller;
 
 import com.group.thr.hedi.DTO.Common.Response.ResponseFormat;
 import com.group.thr.hedi.DTO.HealthRecord.Request.HealthRecordRequest;
-import com.group.thr.hedi.Entity.HealthRecord;
+import com.group.thr.hedi.DTO.HealthRecord.Response.HealthRecordResponse;
 import com.group.thr.hedi.Enum.ResponseCode;
 import com.group.thr.hedi.Service.Interface.IHealthRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class HealthRecordController {
     @PostMapping("/user/{userId}")
     public ResponseFormat createRecord(@PathVariable Long userId, @RequestBody HealthRecordRequest request) {
         try {
-            HealthRecord record = healthRecordService.createRecord(userId, request);
+            HealthRecordResponse record = healthRecordService.createRecord(userId, request);
             return new ResponseFormat(ResponseCode.SUCCESS, "Record created successfully", record);
         } catch (Exception e) {
             return new ResponseFormat(ResponseCode.BAD_REQUEST, e.getMessage());
@@ -31,8 +31,18 @@ public class HealthRecordController {
     @GetMapping("/user/{userId}")
     public ResponseFormat getUserRecords(@PathVariable Long userId) {
         try {
-            List<HealthRecord> records = healthRecordService.getRecordsByUserId(userId);
+            List<HealthRecordResponse> records = healthRecordService.getRecordsByUserId(userId);
             return new ResponseFormat(ResponseCode.SUCCESS, records);
+        } catch (Exception e) {
+            return new ResponseFormat(ResponseCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @GetMapping("/user/{userId}/metric/{metricName}/latest")
+    public ResponseFormat getLatestUserRecord(@PathVariable Long userId, @PathVariable String metricName) {
+        try {
+            HealthRecordResponse record = healthRecordService.getLatestRecord(userId, metricName);
+            return new ResponseFormat(ResponseCode.SUCCESS, record);
         } catch (Exception e) {
             return new ResponseFormat(ResponseCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
