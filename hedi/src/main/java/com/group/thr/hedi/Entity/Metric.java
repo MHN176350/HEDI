@@ -16,18 +16,31 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Metric {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
-@Column(nullable = false, unique = true)
-private String name;
-@Column(nullable = false)
-private String unit;
-@Column(length = 1000)
-private String description;
-@Column(nullable = false)
-private boolean isActive=true;
-@Column(nullable = true)
-private String imgUrl;
-}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false, unique = true)
+    private String name;
+    
+    @Column(nullable = false)
+    private String unit;
+    
+    @Column(length = 1000)
+    private String description;
+    
+    @Column(nullable = false)
+    private boolean isActive = true;
+    
+    @Column(nullable = true)
+    private String imgUrl;
 
+    @Column(nullable = false)
+    private Double minLimit;
+
+    @Column(nullable = false)
+    private Double maxLimit;
+
+    @Column(nullable = true)
+    private String themeColor;
+}

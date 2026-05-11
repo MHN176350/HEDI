@@ -4,6 +4,8 @@ import com.group.thr.hedi.DTO.Authetication.Request.RegisterRequest;
 import com.group.thr.hedi.DTO.Authetication.Request.OAuthUserInfo;
 import com.group.thr.hedi.DTO.Authetication.Response.LoginResponse;
 import com.group.thr.hedi.DTO.Authetication.Response.RegisterResponse;
+import com.group.thr.hedi.DTO.User.Request.UserProfileRequest;
+import com.group.thr.hedi.DTO.User.Response.UserProfileResponse;
 import com.group.thr.hedi.DTO.Authetication.Response.RefreshTokenResponse;
 
 public interface IAuthenticationService {
@@ -13,4 +15,6 @@ public interface IAuthenticationService {
     LoginResponse authenticateWithGoogleCode(String code, String provider);
     RefreshTokenResponse refreshToken(String refreshToken);
     void logout(Long userId);
+    String updateUserProfile(Long userId, UserProfileRequest user);
+    UserProfileResponse getUserProfile(Long userId);
 }

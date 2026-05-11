@@ -5,6 +5,8 @@ import com.group.thr.hedi.DTO.Authetication.Request.OAuthUserInfo;
 import com.group.thr.hedi.DTO.Authetication.Request.GoogleUserProfile;
 import com.group.thr.hedi.DTO.Authetication.Response.LoginResponse;
 import com.group.thr.hedi.DTO.Authetication.Response.RegisterResponse;
+import com.group.thr.hedi.DTO.User.Request.UserProfileRequest;
+import com.group.thr.hedi.DTO.User.Response.UserProfileResponse;
 import com.group.thr.hedi.DTO.Authetication.Response.RefreshTokenResponse;
 import com.group.thr.hedi.Entity.User;
 import com.group.thr.hedi.Repository.IAuthenticationRepository;
@@ -70,7 +72,6 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         response.setEmail(foundUser.getEmail());
         response.setFirstName(foundUser.getFirstName());
         response.setLastName(foundUser.getLastName());
-        response.setFirst(refreshTokenRepository.findByUserId(foundUser.getId()).orElse(null).size()<2);
        
         return response;
     }
@@ -149,17 +150,14 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     }
     public LoginResponse authenticateWithGoogleCode(String code, String provider) {
         try {
-            // Log and validate code
             System.out.println("[DEBUG] authenticateWithGoogleCode called with code: " + code + ", provider: " + provider);
             
             if (code == null || code.trim().isEmpty()) {
                 throw new RuntimeException("Authorization code is null or empty. Make sure the code is being passed from the frontend.");
             }
             
-            // Exchange authorization code for access token
             String accessToken = googleOAuthUtil.getGoogleAccessToken(code);
             
-            // Get user profile from Google
             GoogleUserProfile googleProfile = googleOAuthUtil.getGoogleUserProfile(accessToken);
             
             System.out.println("[DEBUG] Retrieved Google profile: " + googleProfile.getEmail());
@@ -241,5 +239,43 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .build();
         refreshTokenRepository.save(refreshToken);
     }
+
+    @Override
+    public String updateUserProfile(Long userId, UserProfileRequest request) {
+    try{
+    User user = authenticationRepository.findById(userId).orElseThrow(
+        () -> new RuntimeException("User not found")
+    );
+    user.setAge(request.getAge());
+    user.setGender(request.getGender());
+    user.setHeight(request.getHeight());
+    user.setWeight(request.getWeight());
+    authenticationRepository.save(user);}
+    catch(Exception e){
+        throw new RuntimeException("Failed to update profile: " + e.getMessage());
+    }
+    return "Profile updated successfully";
+    }
+
+    @Override
+    public UserProfileResponse getUserProfile(Long userId) {
+        try {
+            User user = authenticationRepository.findById(userId).orElseThrow(
+                () -> new RuntimeException("User not found")
+            );
+            UserProfileResponse response = new UserProfileResponse();
+            response.setEmail(user.getEmail());
+            response.setFirstName(user.getFirstName());
+            response.setLastName(user.getLastName());
+            response.setAge(user.getAge());
+            response.setGender(user.getGender());
+            response.setHeight(user.getHeight());
+            response.setWeight(user.getWeight());
+            return response;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to retrieve profile: " + e.getMessage());
+        }
+    }
+    
    
 }
