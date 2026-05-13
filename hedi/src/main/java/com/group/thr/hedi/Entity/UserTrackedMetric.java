@@ -5,15 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "health_records")
+@Table(name = "user_tracked_metrics")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HealthRecord {
+public class UserTrackedMetric {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,14 +20,23 @@ public class HealthRecord {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "metric_id", nullable = false)
     private Metric metric;
 
     @Column(nullable = false)
-    private double metricValue;
+    private boolean isActive = true;
 
-    @Column(nullable = false)
-    private LocalDateTime recordedAt;
+    @Column(nullable = true)
+    private Double currentPersonalBaseline;
+
+    @Column(nullable = false, columnDefinition = "int default 0")
+    private int consecutiveWarnings;
+
+    @Column(nullable = false, columnDefinition = "int default 0")
+    private int consecutiveAlerts;
+
+    @Column(length = 20)
+    private String currentTrend;
 }

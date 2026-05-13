@@ -57,4 +57,13 @@ public class HealthRecordController {
             return new ResponseFormat(ResponseCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
+    @DeleteMapping("/user/{userId}/metric/{metricName}")
+    public ResponseFormat deleteMetricRecords(@PathVariable Long userId, @PathVariable String metricName) {
+        try {
+            healthRecordService.deleteAllRecordsByMetric(userId, metricName);
+            return new ResponseFormat(ResponseCode.SUCCESS, "Records cleared successfully", null);
+        } catch (Exception e) {
+            return new ResponseFormat(ResponseCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
 }
