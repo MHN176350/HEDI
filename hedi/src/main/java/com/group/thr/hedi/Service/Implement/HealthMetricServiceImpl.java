@@ -1,5 +1,6 @@
 package com.group.thr.hedi.Service.Implement;
 
+import com.group.thr.hedi.DTO.Metric.Request.MetricRequest;
 import com.group.thr.hedi.Entity.Metric;
 import com.group.thr.hedi.Enum.MetricType;
 import com.group.thr.hedi.Repository.IHealthMetricRepository;
@@ -98,5 +99,47 @@ public class HealthMetricServiceImpl implements IHealthMetricService {
         return healthMetricRepository.findAll().stream()
                 .filter(Metric::isActive)
                 .toList();
+    }
+
+    @Override
+    public List<Metric> getAllMetrics() {
+       return healthMetricRepository.findAll();
+    }
+
+    @Override
+    public Metric addMetric(MetricRequest request) {
+        Metric m = new Metric();
+        m.setName(request.getName().toUpperCase().replace(" ", "_"));
+        m.setUnit(request.getUnit());
+        m.setDescription(request.getDescription());
+        m.setImgUrl(request.getImgUrl());
+        m.setMinLimit(request.getMinLimit());
+        m.setMaxLimit(request.getMaxLimit());
+        m.setThemeColor(request.getThemeColor());
+        m.setActive(true);
+        return healthMetricRepository.save(m);
+    }
+
+    @Override
+    public Metric toggleMetricStatus(Long id) {
+       Metric m = healthMetricRepository.findById(id).orElseThrow(() -> new RuntimeException("Metric not found"));
+        m.setActive(!m.isActive());
+        return healthMetricRepository.save(m);
+    }
+
+    @Override
+    public Metric updateMetric(Long id, MetricRequest request) {
+        Metric m = healthMetricRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Metric not found"));
+        
+        if (request.getName() != null) m.setName(request.getName().toUpperCase().replace(" ", "_"));
+        if (request.getUnit() != null) m.setUnit(request.getUnit());
+        if (request.getDescription() != null) m.setDescription(request.getDescription());
+        if (request.getImgUrl() != null) m.setImgUrl(request.getImgUrl());
+        if (request.getMinLimit() != null) m.setMinLimit(request.getMinLimit());
+        if (request.getMaxLimit() != null) m.setMaxLimit(request.getMaxLimit());
+        if (request.getThemeColor() != null) m.setThemeColor(request.getThemeColor());
+        
+        return healthMetricRepository.save(m);
     }
 }
