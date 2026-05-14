@@ -37,13 +37,24 @@ public class User {
     private String oauth_Id;
     
     @Column(nullable = true)
-    private String oauth_Provider;  // e.g., "google", "github"
+    private String oauth_Provider;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RefreshToken> refreshTokens;
+    @Column(name = "age")
+    private Integer age;
+
+    @Column(name = "gender")
+    private String gender;
+
+    @Column(name = "height_cm")
+    private Double height;
+
+    @Column(name = "weight_kg")
+    private Double weight;
 
     @PrePersist
     protected void onCreate() {

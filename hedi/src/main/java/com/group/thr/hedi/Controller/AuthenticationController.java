@@ -1,18 +1,17 @@
 package com.group.thr.hedi.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.group.thr.hedi.DTO.Authetication.Request.LoginRequest;
 import com.group.thr.hedi.DTO.Authetication.Request.RegisterRequest;
-import com.group.thr.hedi.DTO.Authetication.Request.OAuthUserInfo;
 import com.group.thr.hedi.DTO.Authetication.Request.OAuthCallbackRequest;
 import com.group.thr.hedi.DTO.Authetication.Request.RefreshTokenRequest;
 import com.group.thr.hedi.DTO.Authetication.Response.LoginResponse;
 import com.group.thr.hedi.DTO.Authetication.Response.RegisterResponse;
 import com.group.thr.hedi.DTO.Authetication.Response.RefreshTokenResponse;
 import com.group.thr.hedi.DTO.Common.Response.ResponseFormat;
+import com.group.thr.hedi.DTO.User.Request.UserProfileRequest;
+import com.group.thr.hedi.DTO.User.Response.UserProfileResponse;
 import com.group.thr.hedi.Enum.ResponseCode;
 import com.group.thr.hedi.Service.Interface.IAuthenticationService;
 
@@ -33,6 +32,16 @@ public class AuthenticationController {
             return new ResponseFormat(ResponseCode.UNAUTHORIZED, e.getMessage());
         }
     }
+    @GetMapping("/user/{id}/profile")
+        public ResponseFormat getUserProfile(@PathVariable Long id) {
+            try {
+                UserProfileResponse response = authenticationService.getUserProfile(id);
+                return new ResponseFormat(ResponseCode.SUCCESS, response);
+            } catch (Exception e) {
+                return new ResponseFormat(ResponseCode.BAD_REQUEST, e.getMessage());
+            }
+        }
+    
 
     @PostMapping("/register")
     public ResponseFormat register(@RequestBody RegisterRequest registerRequest) {
@@ -78,6 +87,15 @@ public class AuthenticationController {
             return new ResponseFormat(ResponseCode.SUCCESS, "Logged out successfully");
         } catch (Exception e) {
             return new ResponseFormat(ResponseCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+    @PutMapping("/user/{id}/profile")
+    public ResponseFormat updateUserProfile(@PathVariable Long id, @RequestBody UserProfileRequest userProfileRequest) {
+        try {
+            String response = authenticationService.updateUserProfile(id, userProfileRequest);
+            return new ResponseFormat(ResponseCode.SUCCESS, response);
+        } catch (Exception e) {
+            return new ResponseFormat(ResponseCode.BAD_REQUEST, e.getMessage());
         }
     }
 

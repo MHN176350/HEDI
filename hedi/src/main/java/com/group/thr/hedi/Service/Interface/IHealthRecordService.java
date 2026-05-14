@@ -9,4 +9,5 @@ public interface IHealthRecordService {
     List<HealthRecordResponse> getRecordsByUserId(Long userId);
     void deleteRecord(Long id);
     HealthRecordResponse getLatestRecord(Long userId, String metricType);
+    void deleteAllRecordsByMetric(Long userId, String metricType);
 }
