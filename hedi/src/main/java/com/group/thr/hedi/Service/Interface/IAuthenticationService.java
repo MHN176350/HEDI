@@ -17,4 +17,6 @@ public interface IAuthenticationService {
     void logout(Long userId);
     String updateUserProfile(Long userId, UserProfileRequest user);
     UserProfileResponse getUserProfile(Long userId);
+    void forgotPassword(String email);
+    void resetPassword(String token, String newPassword);
 }

@@ -2,8 +2,11 @@ package com.group.thr.hedi.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import com.group.thr.hedi.DTO.Authetication.Request.ForgotPasswordRequest;
 import com.group.thr.hedi.DTO.Authetication.Request.LoginRequest;
 import com.group.thr.hedi.DTO.Authetication.Request.RegisterRequest;
+import com.group.thr.hedi.DTO.Authetication.Request.ResetPasswordRequest;
 import com.group.thr.hedi.DTO.Authetication.Request.OAuthCallbackRequest;
 import com.group.thr.hedi.DTO.Authetication.Request.RefreshTokenRequest;
 import com.group.thr.hedi.DTO.Authetication.Response.LoginResponse;
@@ -94,6 +97,26 @@ public class AuthenticationController {
         try {
             String response = authenticationService.updateUserProfile(id, userProfileRequest);
             return new ResponseFormat(ResponseCode.SUCCESS, response);
+        } catch (Exception e) {
+            return new ResponseFormat(ResponseCode.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseFormat forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        try {
+            authenticationService.forgotPassword(request.getEmail());
+            return new ResponseFormat(ResponseCode.SUCCESS, "If that email exists in our system, a reset link has been sent.", null);
+        } catch (Exception e) {
+            return new ResponseFormat(ResponseCode.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseFormat resetPassword(@RequestBody ResetPasswordRequest request) {
+        try {
+            authenticationService.resetPassword(request.getToken(), request.getNewPassword());
+            return new ResponseFormat(ResponseCode.SUCCESS, "Password has been reset successfully.", null);
         } catch (Exception e) {
             return new ResponseFormat(ResponseCode.BAD_REQUEST, e.getMessage());
         }

@@ -13,6 +13,7 @@ import com.group.thr.hedi.Repository.IAuthenticationRepository;
 import com.group.thr.hedi.Repository.IRefreshTokenRepository;
 import com.group.thr.hedi.Entity.RefreshToken;
 import com.group.thr.hedi.Service.Interface.IAuthenticationService;
+import com.group.thr.hedi.Service.Interface.IEmailService;
 import com.group.thr.hedi.Utils.JwtUtil;
 import com.group.thr.hedi.Utils.GoogleOAuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,9 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
     @Autowired
     private GoogleOAuthUtil googleOAuthUtil;
-
+    
+    @Autowired
+    private IEmailService emailService;
     @Override
     public LoginResponse authenticate(String email, String password) {
         Optional<User> user = authenticationRepository.findByEmail(email);
@@ -275,6 +278,33 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to retrieve profile: " + e.getMessage());
         }
+    }
+    @Override
+    public void forgotPassword(String email) {
+        Optional<User> userOpt = authenticationRepository.findByEmail(email);
+        
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            
+            String resetToken = jwtUtil.generateToken(user.getEmail(), Math.toIntExact(user.getId()), user.getRole().toString());
+        
+            String resetLink = "http://localhost:5173/reset-password?token=" + resetToken;
+            emailService.sendPasswordResetEmail(user.getEmail(), resetLink);
+        }
+    }
+
+    @Override
+    public void resetPassword(String token, String newPassword) {
+        if (!jwtUtil.validateToken(token)) {
+            throw new RuntimeException("Invalid or expired reset token. Please request a new link.");
+        }
+        
+        int userId = jwtUtil.extractUserId(token);
+        User user = authenticationRepository.findById((long) userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+                
+        user.setHashed_Password(passwordEncoder.encode(newPassword));
+        authenticationRepository.save(user);
     }
     
    
