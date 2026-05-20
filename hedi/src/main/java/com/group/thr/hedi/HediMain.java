@@ -1,5 +1,6 @@
 package com.group.thr.hedi;
 
+import com.group.thr.hedi.Service.Interface.IAuthenticationService;
 import com.group.thr.hedi.Service.Interface.IHealthMetricService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +13,8 @@ public class HediMain {
 
     @Autowired
     private IHealthMetricService healthMetricService;
+    @Autowired
+    private IAuthenticationService authenticationService;
 
     public static void main(String[] args) {
         SpringApplication.run(HediMain.class, args);
@@ -20,7 +23,7 @@ public class HediMain {
     @EventListener(ApplicationReadyEvent.class)
     public void onApplicationReady() {
         healthMetricService.initializeDefaultMetrics();
-
+        authenticationService.intializeUserData();
         openSwaggerUI();
     }
 

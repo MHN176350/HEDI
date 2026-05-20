@@ -9,6 +9,7 @@ import com.group.thr.hedi.DTO.User.Request.UserProfileRequest;
 import com.group.thr.hedi.DTO.User.Response.UserProfileResponse;
 import com.group.thr.hedi.DTO.Authetication.Response.RefreshTokenResponse;
 import com.group.thr.hedi.Entity.User;
+import com.group.thr.hedi.Entity.User.Role;
 import com.group.thr.hedi.Repository.IAuthenticationRepository;
 import com.group.thr.hedi.Repository.IRefreshTokenRepository;
 import com.group.thr.hedi.Entity.RefreshToken;
@@ -305,6 +306,20 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 
         user.setHashed_Password(passwordEncoder.encode(newPassword));
         authenticationRepository.save(user);
+    }
+    @Override
+    public void intializeUserData(){
+        if(authenticationRepository.findAll().isEmpty()){
+           User newUser = User.builder()
+                .email("hediAD@gmail.com")
+                .hashed_Password(passwordEncoder.encode("admin123"))
+                .firstName("HEDI")
+                .lastName("Administrator")
+                .role(User.Role.ADMIN)
+                .status(User.AccountStatus.ACTIVE)
+                .build();
+            authenticationRepository.save(newUser);
+        }
     }
     
    

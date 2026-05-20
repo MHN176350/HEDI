@@ -40,21 +40,13 @@ public class HealthMetricServiceImpl implements IHealthMetricService {
                         newMetric.setMaxLimit(100.0);
                         newMetric.setThemeColor("#3b82f6"); 
                         break;
-                    case BLOOD_PRESSURE_SYSTOLIC:
+                    case BLOOD_PRESSURE:
                         newMetric.setUnit("mmHg");
                         newMetric.setDescription("Pressure in arteries when the heart beats.");
                         newMetric.setImgUrl("https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=500&auto=format&fit=crop&q=60");
                         newMetric.setMinLimit(90.0);
                         newMetric.setMaxLimit(120.0);
                         newMetric.setThemeColor("#a855f7"); 
-                        break;
-                    case BLOOD_PRESSURE_DIASTOLIC:
-                        newMetric.setUnit("mmHg");
-                        newMetric.setDescription("Pressure in arteries between heartbeats.");
-                        newMetric.setImgUrl("https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=500&auto=format&fit=crop&q=60");
-                        newMetric.setMinLimit(60.0);
-                        newMetric.setMaxLimit(80.0);
-                        newMetric.setThemeColor("#6366f1"); 
                         break;
                     case HEART_RATE:
                         newMetric.setUnit("BPM");
