@@ -2,8 +2,10 @@ package com.group.thr.hedi.Controller;
 
 import com.group.thr.hedi.DTO.Common.Response.ResponseFormat;
 import com.group.thr.hedi.Enum.ResponseCode;
+import com.group.thr.hedi.Service.Implement.SseNotificationService;
 import com.group.thr.hedi.Service.Interface.INotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,6 +15,8 @@ public class NotificationController {
 
     @Autowired
     private INotificationService notificationService;
+    @Autowired
+    private SseNotificationService sseService;
 
     @GetMapping("/user/{userId}")
     public ResponseFormat getUserNotifications(@PathVariable Long userId) {
@@ -23,5 +27,9 @@ public class NotificationController {
     public ResponseFormat markAllAsRead(@PathVariable Long userId) {
         notificationService.markAllAsRead(userId);
         return new ResponseFormat(ResponseCode.SUCCESS, "Marked as read", null);
+    }
+    @GetMapping(value = "/stream/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public org.springframework.web.servlet.mvc.method.annotation.SseEmitter streamNotifications(@PathVariable Long userId) {
+        return sseService.subscribe(userId);
     }
 }

@@ -20,6 +20,8 @@ public class NotificationServiceImpl implements INotificationService {
     private INotificationRepository notificationRepository;
     @Autowired
     private IAuthenticationRepository userRepository;
+    @Autowired
+    private SseNotificationService sseService;
 
     @Override
     public void createNotification(Long userId, String typeStr, String message) {
@@ -32,8 +34,8 @@ public class NotificationServiceImpl implements INotificationService {
         notification.setMessage(message);
         notification.setRead(false);
         notification.setCreatedAt(LocalDateTime.now());
-        
         notificationRepository.save(notification);
+        sseService.dispatchAlert(userId);
     }
 
     @Override
