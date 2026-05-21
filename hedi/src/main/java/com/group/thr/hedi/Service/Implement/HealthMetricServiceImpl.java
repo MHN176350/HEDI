@@ -35,7 +35,7 @@ public class HealthMetricServiceImpl implements IHealthMetricService {
                     case BLOOD_SUGAR:
                         newMetric.setUnit("mg/dL");
                         newMetric.setDescription("Measures the amount of glucose in the blood.");
-                        newMetric.setImgUrl("https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&auto=format&fit=crop&q=60");
+                        newMetric.setImgUrl("https://static.vecteezy.com/system/resources/previews/026/333/271/non_2x/blood-sugar-icon-in-line-style-design-isolated-on-white-background-editable-stroke-vector.jpg");
                         newMetric.setMinLimit(70.0);
                         newMetric.setMaxLimit(100.0);
                         newMetric.setThemeColor("#3b82f6"); 
@@ -43,7 +43,7 @@ public class HealthMetricServiceImpl implements IHealthMetricService {
                     case BLOOD_PRESSURE:
                         newMetric.setUnit("mmHg");
                         newMetric.setDescription("Pressure in arteries when the heart beats.");
-                        newMetric.setImgUrl("https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=500&auto=format&fit=crop&q=60");
+                        newMetric.setImgUrl("https://static.vecteezy.com/system/resources/previews/025/782/718/non_2x/blood-pressure-icon-free-vector.jpg");
                         newMetric.setMinLimit(90.0);
                         newMetric.setMaxLimit(120.0);
                         newMetric.setThemeColor("#a855f7"); 
@@ -51,7 +51,7 @@ public class HealthMetricServiceImpl implements IHealthMetricService {
                     case HEART_RATE:
                         newMetric.setUnit("BPM");
                         newMetric.setDescription("Number of times the heart beats per minute.");
-                        newMetric.setImgUrl("https://images.unsplash.com/photo-1505503693641-1926193e8d57?w=500&auto=format&fit=crop&q=60");
+                        newMetric.setImgUrl("https://www.iconpacks.net/icons/2/free-heart-beat-icon-3519-thumb.png");
                         newMetric.setMinLimit(60.0);
                         newMetric.setMaxLimit(100.0);
                         newMetric.setThemeColor("#ef4444");
@@ -59,7 +59,7 @@ public class HealthMetricServiceImpl implements IHealthMetricService {
                     case SpO2_LEVEL:
                         newMetric.setUnit("%");
                         newMetric.setDescription("Oxygen saturation level in the blood.");
-                        newMetric.setImgUrl("https://images.unsplash.com/photo-1584308666744-24d59b298b17?w=500&auto=format&fit=crop&q=60");
+                        newMetric.setImgUrl("https://www.shutterstock.com/image-vector/oxygen-saturation-icon-vector-illustration-600nw-2291345701.jpg");
                         newMetric.setMinLimit(95.0);
                         newMetric.setMaxLimit(100.0);
                         newMetric.setThemeColor("#06b6d4");
@@ -67,7 +67,7 @@ public class HealthMetricServiceImpl implements IHealthMetricService {
                     case BMI:
                         newMetric.setUnit("");
                         newMetric.setDescription("Estimate total body fat and determine if they are at a healthy weight");
-                        newMetric.setImgUrl("https://plus.unsplash.com/premium_photo-1681400641919-d5d03f6c0720?w=500&auto=format&fit=crop&q=60");
+                        newMetric.setImgUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw4ABClItC_xnrJ5HXw95cw5WoW_GcRCutrg&s");
                         newMetric.setMinLimit(18.5);
                         newMetric.setMaxLimit(24.9);
                         newMetric.setThemeColor("#22c55e"); 
